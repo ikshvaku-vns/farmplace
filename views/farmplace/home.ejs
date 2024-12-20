@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+  <div class="d-flex justify-content-center">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Current Commodity Prices</h5>
+            <p class="card-text">
+              View the latest prices of your favorite commodities.
+            </p>
+            <button class="btn btn-primary">View Prices</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Featured Sellers</h5>
+            <p class="card-text">
+              Check out top-rated sellers in the marketplace.
+            </p>
+            <form action="/farmplace/sellers">
+              <button class="btn btn-success">View Sellers</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Post a Commodity</h5>
+            <p class="card-text">
+              List your commodity for buyers to see. this is to see ifit workds
+            </p>
+            <form action="/farmplace/new">
+              <button class="btn btn-warning">Post Now</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
