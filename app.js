@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -15,9 +19,10 @@ const usersRoutes = require("./routes/users.js");
 const farmplaces = require("./routes/farmplaces.js");
 const comments = require("./routes/comments.js");
 const mongoSanitize = require("express-mongo-sanitize");
-
+const dbUrl = process.env.DB_URL;
+const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/farm-market");
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -37,6 +42,18 @@ app.use(
     replaceWith: "_",
   })
 );
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: "thisshouldbeabettersecret",
+  },
+});
+
+store.on("error", function (e) {
+  console.log("Session Store Error");
+});
+
 const sessionConfig = {
   name: "session",
   secret: "thisshouldbeabettersecret",
@@ -126,6 +143,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err });
 });
 
-app.listen(3000, () => {
-  console.log("Serving on port 3000");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Serving on port ${port}`);
 });
