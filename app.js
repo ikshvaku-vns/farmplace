@@ -111,6 +111,7 @@ app.use(
         "https://res.cloudinary.com/dbs7lbbkj/",
         "https://images.unsplash.com/",
         "https://media.istockphoto.com",
+        "https://cdn.pixabay.com",
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
@@ -132,6 +133,10 @@ app.use((req, res, next) => {
 app.use("/", usersRoutes);
 app.use("/farmplace", farmplaces);
 app.use("/farmplace/:id/comments", comments);
+
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not found", 404));
