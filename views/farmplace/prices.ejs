@@ -1,0 +1,79 @@
+<% layout('layouts/boilerplate') %>
+<script src="https://js.stripe.com/v3/"></script>
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="mb-3">
+      <label class="form-label" for="farmproduct">Farmproduct</label>
+      <form method="get" action="/farmplace/prices">
+        <select
+          class="form-select"
+          id="farmproduct"
+          aria-label="Default select example"
+          name="farmproduct"
+        >
+          <!-- Dropdown options -->
+          <option value="" <%= !farmproduct ? "selected" : "" %>>Select the farm Product</option>
+          <option value="Potato" <%= farmproduct === "Potato" ? "selected" : "" %>>Potato</option>
+          <option value="Onion" <%= farmproduct === "Onion" ? "selected" : "" %>>Onion</option>
+          <option value="Tomato" <%= farmproduct === "Tomato" ? "selected" : "" %>>Tomato</option>
+        </select>
+        <div class="mb-3">
+          <button class="btn btn-success">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Display the filtered list of farms -->
+<div class="row">
+  <% for (let farm of farmplace) { %>
+    <div class="card mb-3">
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= farm.name %></h5>
+          <p class="card-text">Price: <%= farm.price %></p>
+          <p class="card-text">Location: <%= farm.location %></p>
+          <p class="card-text">Product: <%= farm.farmproduct %></p>
+          <a class="btn btn-primary" href="/farmplace/<%= farm._id %>">View <%= farm.name %></a>
+          <!-- Button for triggering Stripe checkout -->
+          <button class="btn btn-primary checkout-button" data-product-id="<%= farm._id %>" data-product-price="<%= farm.price %>">Buy</button>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  document.querySelectorAll(".checkout-button").forEach((button) => {
+    button.addEventListener("click", async function () {
+      const productId = this.getAttribute("data-product-id");
+      const productPrice = this.getAttribute("data-product-price");
+
+      console.log("Product ID:", productId);  // Log to check if data is correctly retrieved
+      console.log("Product Price:", productPrice); 
+
+      button.disabled = true; // Disable button while processing
+      try {
+        const response = await fetch("/farmplace/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId, productPrice }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to create checkout session");
+        }
+
+        const { sessionId } = await response.json();
+        const stripe = Stripe("<%= stripePublishableKey %>");
+        stripe.redirectToCheckout({ sessionId });
+      } catch (error) {
+        console.error("Error creating checkout session:", error);
+        alert("Unable to proceed to checkout.");
+      } finally {
+        button.disabled = false; // Re-enable button
+      }
+    });
+  });
+</script>

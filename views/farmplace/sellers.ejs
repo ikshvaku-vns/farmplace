@@ -1,13 +1,20 @@
 <% layout('layouts/boilerplate') %>
 <h1>Sellers List</h1>
-<ul>
-  <% for(let farm of farmplace){ %>
-  <li>
-    <a href="/farmplace/<%=farm._id  %>"><%=farm.name %></a>
-  </li>
-  <% } %>
-</ul>
+<% for (let farm of farmplace){%>
+<div class="card mb-3">
+  <div class="col-md-8">
+    <div class="card-body">
+      <h5 class="card-title"><%=farm.name %></h5>
 
-<footer>
-  <a href="/farmplace">Home</a>
-</footer>
+      <p class="card-text"><%=farm.name %></p>
+      <p class="card-text">
+        <small class="text-muted"><%=farm.location %></small>
+      </p>
+      <a class="btn btn-primary" href="/farmplace/<%=farm._id %>"
+        >View<%=farm.name %></a
+      >
+    </div>
+  </div>
+</div>
+
+<% }%>

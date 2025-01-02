@@ -12,6 +12,9 @@ const flash = require("connect-flash");
 
 const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
+const passportSetup = require("./passport-setup");
+console.log("Passport setup loaded successfully!");
+
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const helmet = require("helmet");
@@ -19,6 +22,10 @@ const usersRoutes = require("./routes/users.js");
 const farmplaces = require("./routes/farmplaces.js");
 const comments = require("./routes/comments.js");
 const mongoSanitize = require("express-mongo-sanitize");
+require("dotenv").config(); // Load environment variables from .env file
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 const dbUrl = process.env.DB_URL;
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
@@ -69,7 +76,7 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet());
-
+app.use(express.json());
 const scriptSrcUrls = [
   "https://stackpath.bootstrapcdn.com/",
   "https://api.tiles.mapbox.com/",
@@ -77,6 +84,7 @@ const scriptSrcUrls = [
   "https://kit.fontawesome.com/",
   "https://cdnjs.cloudflare.com/",
   "https://cdn.jsdelivr.net",
+  "https://js.stripe.com/v3/",
 ];
 const styleSrcUrls = [
   "https://kit-free.fontawesome.com/",
@@ -91,6 +99,7 @@ const connectSrcUrls = [
   "https://a.tiles.mapbox.com/",
   "https://b.tiles.mapbox.com/",
   "https://events.mapbox.com/",
+  "https://js.stripe.com/v3/",
 ];
 const fontSrcUrls = [];
 app.use(
@@ -114,6 +123,7 @@ app.use(
         "https://cdn.pixabay.com",
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
+      frameSrc: ["'self'", "https://js.stripe.com/"],
     },
   })
 );
@@ -130,12 +140,23 @@ app.use((req, res, next) => {
   next();
 });
 
+const authRoutes = require("./routes/users"); // Adjust the path as needed
+app.use(authRoutes);
+
 app.use("/", usersRoutes);
 app.use("/farmplace", farmplaces);
 app.use("/farmplace/:id/comments", comments);
 
 app.get("/", (req, res) => {
   res.render("home");
+});
+
+app.get("/success", (req, res) => {
+  res.render("farmplace/success");
+});
+
+app.get("/cancel", (req, res) => {
+  res.render("farmplace/cancel");
 });
 
 app.all("*", (req, res, next) => {

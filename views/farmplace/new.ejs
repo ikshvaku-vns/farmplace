@@ -27,7 +27,7 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="price">Price</label>
+        <label class="form-label" for="price">Price/Kg</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">&#8377; </span>
           <input
@@ -45,19 +45,26 @@
       </div>
       <div class="mb-3">
         <label class="form-label" for="farmproduct">Farmproduct</label>
-        <textarea
-          class="form-control"
-          type="text"
+
+        <select
+          class="form-select"
           id="farmproduct"
+          aria-label="Default select example"
           name="farmplace[farmproduct]"
-          required
-        ></textarea>
-        <div class="valid-feedback">Looks good</div>
+        >
+          <option selected>Select the farmproduct</option>
+          <option value="Potato">Potato</option>
+          <option value="Onion">Onion</option>
+          <option value="Tomato">Tomato</option>
+        </select>
       </div>
+      <!-- <div class="mb-3">
+        <label for="Date">Date</label>
+        <input type="date" required id="Date" />
+      </div> -->
       <div class="mb-3">
         <button class="btn btn-success">Add Farmproduct</button>
       </div>
     </form>
-    <a href="/farmplace/sellers">All Sellers</a>
   </div>
 </div>

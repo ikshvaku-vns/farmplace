@@ -30,6 +30,7 @@ module.exports.farmplaceSchema = Joi.object({
     price: Joi.number().required().min(0),
     location: Joi.string().required(),
     farmproduct: Joi.string().required(),
+    dateAdded: Joi.date().default(() => new Date()),
   }).required(),
 });
 

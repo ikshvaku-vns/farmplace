@@ -5,15 +5,14 @@
     <div class="card mb-3">
       <div class="card-body">
         <h5 class="card-title"><%= farmplace.name%></h5>
-        <p class="card-text"><%= farmplace.farmproduct%></p>
       </div>
+
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted"><%= farmplace.location%></li>
-        <li class="list-group-item">
-          Submitted by <%= farmplace.author.username%>
-        </li>
-        <li class="list-group-item">&#8377;<%= farmplace.price%></li>
+        <li class="list-group-item"><%= farmplace.farmproduct%></li>
+        <li class="list-group-item">&#8377;<%= farmplace.price%>/Kg</li>
       </ul>
+
       <%if(currentUser && farmplace.author.equals(currentUser)) {%>
       <div class="card-body">
         <a
@@ -30,7 +29,7 @@
         </form>
       </div>
       <% } %>
-      <div class="card-footer text-muted">2 days ago</div>
+      <div class="card-footer text-muted"><%= farmplace.dateAdded %></div>
     </div>
   </div>
   <div class="col-6">
@@ -42,17 +41,6 @@
       class="mb-3 validated-form"
       novalidate
     >
-      <!-- <div class="mb-3">
-        <label class="form-label" for="rating">Rating</label>
-        <input
-          class="form-range"
-          type="range"
-          min="1"
-          max="5"
-          id="form-label"
-          name="comment[rating]"
-        />
-      </div> -->
       <fieldset class="starability-basic">
         <input
           type="radio"

@@ -54,15 +54,17 @@
       </div>
       <div class="mb-3">
         <label class="form-label" for="farmproduct">Farmproduct</label>
-        <textarea
-          class="form-control"
-          type="text"
-          id="farmproduct"
+        <select
+          class="form-select"
+          aria-label="Default select example"
           name="farmplace[farmproduct]"
-          required
         >
-        <%=farmplace.farmproduct %>
-        </textarea>
+          <option selected><%=farmplace.farmproduct %></option>
+          <option value="Potato">Potato</option>
+          <option value="Onion">Onion</option>
+          <option value="Tomato">Tomato</option>
+        </select>
+
         <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
